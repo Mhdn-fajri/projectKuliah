@@ -8,5 +8,5 @@ Aplikasi kalkulator sederhana berbasis web menggunakan Python (Flask).
 
 ```bash
 python app.py
-
+```
 <br>dengan hasil ![Alt Text](hasilImage/kalkulator.png)
