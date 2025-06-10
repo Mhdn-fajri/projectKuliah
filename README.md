@@ -27,7 +27,7 @@ dengan hasil ![Alt Text](KirimPesan/hasilImage/image.png)
 # TODO LIST JOB
 
 Aplikasi Todo List sederhana berbasis web menggunakan Python (Flask).
-
+Dapat menambahkan, dan menghapus list tugas/ capaian yang di tulis!
 ---
 
 ## Syarat menjalankan aplikasi lewat terminal:
@@ -35,4 +35,4 @@ Aplikasi Todo List sederhana berbasis web menggunakan Python (Flask).
 ```bash
 python app.py
 ```
-dengan hasil ![Alt Text](hasilImage/image.png)
+dengan hasil ![Alt Text](Todo_App/hasilImage/image.png)
