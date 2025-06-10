@@ -1,6 +1,6 @@
 # KIRIM PESAN WHATSAPP
 
-Aplikasi kalkulator sederhana berbasis web menggunakan Python (Flask).
+Aplikasi Kirim Pesan Whatsapp sederhana berbasis web menggunakan Python (Flask).
 
 ---
 
