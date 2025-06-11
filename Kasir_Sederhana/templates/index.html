@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kasir Sederhana</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 8px 12px; border: 1px solid #ccc; }
+        form { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Kasir Sederhana</h1>
+
+    <form method="POST" action="/tambah">
+        <input type="text" name="nama" placeholder="Nama Barang" required>
+        <input type="number" name="harga" placeholder="Harga" required>
+        <button type="submit">Tambah</button>
+    </form>
+
+    <table>
+        <tr>
+            <th>Nama Barang</th>
+            <th>Harga</th>
+        </tr>
+        {% for item in belanja %}
+        <tr>
+            <td>{{ item.nama }}</td>
+            <td>Rp {{ "{:,}".format(item.harga) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Total: Rp {{ "{:,}".format(total) }}</h3>
+
+    <a href="/reset">Reset Belanja</a>
+</body>
+</html>
