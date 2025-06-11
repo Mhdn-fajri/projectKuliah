@@ -17,6 +17,12 @@ def tambah():
     daftar_belanja.append({'nama': nama, 'harga': harga})
     return redirect(url_for('index'))
 
+@app.route('/hapus/<int:index>')
+def hapus(index):
+    if 0 <= index < len(daftar_belanja):
+        del daftar_belanja[index]
+    return redirect(url_for('index'))
+
 @app.route('/reset')
 def reset():
     daftar_belanja.clear()

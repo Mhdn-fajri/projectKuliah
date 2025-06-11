@@ -1,38 +1,155 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+    <meta charset="UTF-8">
     <title>Kasir Sederhana</title>
     <style>
-        body { font-family: Arial; padding: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 8px 12px; border: 1px solid #ccc; }
-        form { margin-bottom: 20px; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f7f9fc;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            padding-top: 40px;
+        }
+
+        .container {
+            background: white;
+            width: 100%;
+            max-width: 700px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            flex: 1 1 45%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            flex: 1 1 100%;
+            padding: 10px;
+            background-color: #2c7be5;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #1a66d1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        th {
+            background-color: #f0f2f5;
+        }
+
+        .btn-hapus {
+            background-color: #e74c3c;
+            color: white;
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-hapus:hover {
+            background-color: #c0392b;
+        }
+
+        h3 {
+            text-align: right;
+            margin-top: 20px;
+            color: #444;
+        }
+
+        .reset-link {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #e74c3c;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+
+        .reset-link:hover {
+            color: #c0392b;
+        }
+
+        @media (max-width: 600px) {
+            form input,
+            form button {
+                flex: 1 1 100%;
+            }
+
+            h3 {
+                text-align: left;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Kasir Sederhana</h1>
+    <div class="container">
+        <h1>Kasir Sederhana</h1>
 
-    <form method="POST" action="/tambah">
-        <input type="text" name="nama" placeholder="Nama Barang" required>
-        <input type="number" name="harga" placeholder="Harga" required>
-        <button type="submit">Tambah</button>
-    </form>
+        <form method="POST" action="/tambah">
+            <input type="text" name="nama" placeholder="Nama Barang" required>
+            <input type="number" name="harga" placeholder="Harga (Rp)" required>
+            <button type="submit">Tambah ke Daftar</button>
+        </form>
 
-    <table>
-        <tr>
-            <th>Nama Barang</th>
-            <th>Harga</th>
-        </tr>
-        {% for item in belanja %}
-        <tr>
-            <td>{{ item.nama }}</td>
-            <td>Rp {{ "{:,}".format(item.harga) }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+        <table>
+            <tr>
+                <th>Nama Barang</th>
+                <th>Harga</th>
+                <th>Aksi</th>
+            </tr>
+            {% for item in belanja %}
+            <tr>
+                <td>{{ item.nama }}</td>
+                <td>Rp {{ "{:,}".format(item.harga) }}</td>
+                <td><a class="btn-hapus" href="/hapus/{{ loop.index0 }}">Hapus</a></td>
+            </tr>
+            {% endfor %}
+        </table>
 
-    <h3>Total: Rp {{ "{:,}".format(total) }}</h3>
+        <h3>Total: Rp {{ "{:,}".format(total) }}</h3>
 
-    <a href="/reset">Reset Belanja</a>
+        <a class="reset-link" href="/reset">🗑 Reset Belanja</a>
+    </div>
 </body>
 </html>
