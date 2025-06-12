@@ -3,34 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Waktu Sholat - {{ city }}</title>
-    <style>
-        body { font-family: sans-serif; background: #f5f5f5; padding: 20px; }
-        .card { background: white; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        input[type="text"] { padding: 8px; width: 80%; }
-        button { padding: 8px 12px; }
-        h2 { color: #007BFF; }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="card">
-        <h2>Waktu Sholat - {{ city }}</h2>
-        <form method="POST">
-            <input type="text" name="city" placeholder="Masukkan nama kota" required>
-            <button type="submit">Lihat</button>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center text-blue-600 mb-4">Jadwal Sholat</h1>
+
+        <form method="POST" class="flex mb-6">
+            <input type="text" name="city" placeholder="Masukkan nama kota"
+                class="flex-grow px-4 py-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required>
+            <button type="submit"
+                class="px-4 py-2 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 transition">Cari</button>
         </form>
 
+        <div class="text-center mb-4">
+            <h2 class="text-lg font-semibold text-gray-800">📍 {{ city }}</h2>
+            {% if hijri_date %}
+            <p class="text-sm text-gray-500">
+                📅 {{ hijri_date.day }} {{ hijri_date.month.en }} {{ hijri_date.year }} H
+            </p>
+            {% endif %}
+        </div>
+
         {% if prayer_times %}
-        <ul>
-            <li><strong>Subuh:</strong> {{ prayer_times.Fajr }}</li>
-            <li><strong>Dzuhur:</strong> {{ prayer_times.Dhuhr }}</li>
-            <li><strong>Ashar:</strong> {{ prayer_times.Asr }}</li>
-            <li><strong>Maghrib:</strong> {{ prayer_times.Maghrib }}</li>
-            <li><strong>Isya:</strong> {{ prayer_times.Isha }}</li>
-        </ul>
-        <hr>
-        <p><strong>Tanggal Hijriyah:</strong> {{ hijri_date.day }} {{ hijri_date.month.en }} {{ hijri_date.year }} H</p>
+        <div class="grid grid-cols-2 gap-4 text-sm">
+            <div class="bg-gray-50 p-3 rounded-lg shadow text-center">
+                <p class="text-gray-500">Subuh</p>
+                <p class="font-semibold text-blue-700">{{ prayer_times.Fajr }}</p>
+            </div>
+            <div class="bg-gray-50 p-3 rounded-lg shadow text-center">
+                <p class="text-gray-500">Dzuhur</p>
+                <p class="font-semibold text-blue-700">{{ prayer_times.Dhuhr }}</p>
+            </div>
+            <div class="bg-gray-50 p-3 rounded-lg shadow text-center">
+                <p class="text-gray-500">Ashar</p>
+                <p class="font-semibold text-blue-700">{{ prayer_times.Asr }}</p>
+            </div>
+            <div class="bg-gray-50 p-3 rounded-lg shadow text-center">
+                <p class="text-gray-500">Maghrib</p>
+                <p class="font-semibold text-blue-700">{{ prayer_times.Maghrib }}</p>
+            </div>
+            <div class="bg-gray-50 p-3 rounded-lg shadow text-center col-span-2">
+                <p class="text-gray-500">Isya</p>
+                <p class="font-semibold text-blue-700">{{ prayer_times.Isha }}</p>
+            </div>
+        </div>
         {% else %}
-        <p>Waktu sholat tidak ditemukan.</p>
+        <p class="text-red-500 text-center mt-4">Data tidak ditemukan. Coba nama kota lain.</p>
         {% endif %}
     </div>
 </body>
