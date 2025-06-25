@@ -1,58 +1,60 @@
-# ================================================
-# main.py - Sistem Deteksi Angka Tulisan Tangan
-# ================================================
+# main.py
+import tkinter as tk
+from PIL import Image, ImageDraw, ImageOps
+import numpy as np
+import joblib
+from sklearn.datasets import load_digits
 
-# Import library yang dibutuhkan
-import numpy as np  # Untuk operasi numerik
-import matplotlib.pyplot as plt  # Untuk visualisasi gambar
-from sklearn.datasets import load_digits  # Dataset angka
-from sklearn.model_selection import train_test_split  # Untuk membagi data
-from sklearn.linear_model import LogisticRegression  # Model AI sederhana
-from sklearn.metrics import accuracy_score  # Mengukur akurasi model
-import joblib  # Untuk menyimpan dan memuat model
+# Muat model
+model = joblib.load("models/digit_model.pkl")
 
-# ------------------------------------------------
-# Load dataset digit angka dari sklearn
-digits = load_digits()  # Dataset 8x8 pixel gambar angka
-X = digits.data  # Fitur (gambar dalam bentuk array)
-y = digits.target  # Label (angka 0-9)
+# Buat canvas gambar
+class DrawApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Deteksi Angka AI")
 
-# Tampilkan salah satu gambar sebagai contoh
-plt.gray()
-plt.matshow(digits.images[0])  # Visualisasi gambar pertama
-plt.title(f"Contoh Gambar: {y[0]}")
-plt.show()
+        self.canvas = tk.Canvas(root, width=200, height=200, bg='white')
+        self.canvas.pack()
 
-# ------------------------------------------------
-# Membagi dataset menjadi data latih dan data uji
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
+        self.button_frame = tk.Frame(root)
+        self.button_frame.pack()
 
-# ------------------------------------------------
-# Melatih model AI sederhana (Logistic Regression)
-model = LogisticRegression(max_iter=10000)  # Model klasifikasi
-model.fit(X_train, y_train)  # Melatih model dengan data latih
+        tk.Button(self.button_frame, text="Prediksi", command=self.predict).pack(side="left")
+        tk.Button(self.button_frame, text="Bersihkan", command=self.clear_canvas).pack(side="left")
 
-# ------------------------------------------------
-# Menguji akurasi model terhadap data uji
-y_pred = model.predict(X_test)  # Prediksi
-accuracy = accuracy_score(y_test, y_pred)  # Hitung akurasi
-print(f"✅ Akurasi model: {accuracy:.2f}")
+        self.image = Image.new("L", (200, 200), "white")
+        self.draw = ImageDraw.Draw(self.image)
 
-# ------------------------------------------------
-# Menyimpan model ke folder models/
-import os
-os.makedirs('models', exist_ok=True)  # Buat folder jika belum ada
-joblib.dump(model, 'models/digit_model.pkl')  # Simpan model
-print("💾 Model disimpan di models/digit_model.pkl")
+        self.canvas.bind("<B1-Motion>", self.paint)
 
-# ------------------------------------------------
-# Prediksi satu gambar dari data uji
-index = 10
-sample_image = X_test[index].reshape(1, -1)  # Ambil satu gambar
-prediction = model.predict(sample_image)  # Prediksi angka
-print(f"🔍 Prediksi angka: {prediction[0]}")
-plt.matshow(X_test[index].reshape(8, 8))  # Tampilkan gambar
-plt.title(f"Model Menebak: {prediction[0]}")
-plt.show()
+        self.result_label = tk.Label(root, text="", font=("Arial", 16))
+        self.result_label.pack()
+
+    def paint(self, event):
+        x, y = event.x, event.y
+        r = 8
+        self.canvas.create_oval(x - r, y - r, x + r, y + r, fill='black')
+        self.draw.ellipse([x - r, y - r, x + r, y + r], fill="black")
+
+    def clear_canvas(self):
+        self.canvas.delete("all")
+        self.image = Image.new("L", (200, 200), "white")
+        self.draw = ImageDraw.Draw(self.image)
+        self.result_label.config(text="")
+
+    def predict(self):
+        # Resize gambar ke 8x8 (ukuran data latih)
+        img_resized = self.image.resize((8, 8))
+        img_resized = ImageOps.invert(img_resized)  # Balik warna
+
+        img_array = np.array(img_resized).astype(float)
+        img_array = (16.0 * img_array / 255.0).reshape(1, -1)  # Normalisasi seperti MNIST
+
+        prediction = model.predict(img_array)[0]
+        self.result_label.config(text=f"Prediksi Angka: {prediction}")
+
+# Jalankan aplikasi
+root = tk.Tk()
+app = DrawApp(root)
+root.mainloop()
