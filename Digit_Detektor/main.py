@@ -1,25 +1,58 @@
-# main.py
+# ================================================
+# main.py - Sistem Deteksi Angka Tulisan Tangan
+# ================================================
 
-# Mengimpor fungsi load_model dan predict_digit dari trainer
-from model.trainer import load_model, predict_digit
-from utils.helper import show_digit_image
-from sklearn.datasets import load_digits
+# Import library yang dibutuhkan
+import numpy as np  # Untuk operasi numerik
+import matplotlib.pyplot as plt  # Untuk visualisasi gambar
+from sklearn.datasets import load_digits  # Dataset angka
+from sklearn.model_selection import train_test_split  # Untuk membagi data
+from sklearn.linear_model import LogisticRegression  # Model AI sederhana
+from sklearn.metrics import accuracy_score  # Mengukur akurasi model
+import joblib  # Untuk menyimpan dan memuat model
 
-# Load dataset digits
-digits = load_digits()
+# ------------------------------------------------
+# Load dataset digit angka dari sklearn
+digits = load_digits()  # Dataset 8x8 pixel gambar angka
+X = digits.data  # Fitur (gambar dalam bentuk array)
+y = digits.target  # Label (angka 0-9)
 
-# Pilih satu sample (misalnya index ke-100)
-index = 100
-image = digits.images[index]
-data = digits.data[index]
+# Tampilkan salah satu gambar sebagai contoh
+plt.gray()
+plt.matshow(digits.images[0])  # Visualisasi gambar pertama
+plt.title(f"Contoh Gambar: {y[0]}")
+plt.show()
 
-# Menampilkan gambar digit
-show_digit_image(image)
+# ------------------------------------------------
+# Membagi dataset menjadi data latih dan data uji
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
-# Load model yang sudah dilatih
-model = load_model()
+# ------------------------------------------------
+# Melatih model AI sederhana (Logistic Regression)
+model = LogisticRegression(max_iter=10000)  # Model klasifikasi
+model.fit(X_train, y_train)  # Melatih model dengan data latih
 
-# Prediksi angka berdasarkan data input
-prediction = predict_digit(model, data)
+# ------------------------------------------------
+# Menguji akurasi model terhadap data uji
+y_pred = model.predict(X_test)  # Prediksi
+accuracy = accuracy_score(y_test, y_pred)  # Hitung akurasi
+print(f"✅ Akurasi model: {accuracy:.2f}")
 
-print(f"Model memprediksi angka tersebut adalah: {prediction}")
+# ------------------------------------------------
+# Menyimpan model ke folder models/
+import os
+os.makedirs('models', exist_ok=True)  # Buat folder jika belum ada
+joblib.dump(model, 'models/digit_model.pkl')  # Simpan model
+print("💾 Model disimpan di models/digit_model.pkl")
+
+# ------------------------------------------------
+# Prediksi satu gambar dari data uji
+index = 10
+sample_image = X_test[index].reshape(1, -1)  # Ambil satu gambar
+prediction = model.predict(sample_image)  # Prediksi angka
+print(f"🔍 Prediksi angka: {prediction[0]}")
+plt.matshow(X_test[index].reshape(8, 8))  # Tampilkan gambar
+plt.title(f"Model Menebak: {prediction[0]}")
+plt.show()
