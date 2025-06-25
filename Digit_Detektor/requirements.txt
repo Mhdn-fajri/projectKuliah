@@ -1,4 +1,6 @@
 numpy
 Pillow
 joblib
+matplotlib
+opencv-python
 scikit-learn
