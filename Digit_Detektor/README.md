@@ -19,4 +19,5 @@ pip install -r requirements.txt
 ```bash
 python main.py
 ```
-dengan hasil ![Alt Text](hasilImage/Digitektor.png)
+
+dengan hasil ! <br>[Alt Text](hasilImage/Digitektor.png)</br>
