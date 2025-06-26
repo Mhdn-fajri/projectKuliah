@@ -87,7 +87,4 @@ pip install -r requirements.txt
 python main.py
 ```
 
-dengan hasil !
-
----
-[Alt Text](Digit_Detektor/hasilImage/Digitektor.png)
+dengan hasil ![Alt Text](Digit_Detektor/hasilImage/Digitektor.png)
